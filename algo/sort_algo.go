@@ -207,3 +207,26 @@ func PlusOne(digits []int) []int {
 
 	return digits
 }
+
+func TwoSum(nums []int, target int) []int {
+	m := make(map[int]int, 0)
+
+	for i, v := range nums {
+		m[v] = i
+	}
+
+	res := make([]int, 0)
+	for i, v := range nums {
+		_, ok := m[target-v]
+		if ok {
+			if i == m[target-v] {
+				continue
+			}
+
+			res = append(res, i, m[target-v])
+			break
+		}
+	}
+
+	return res
+}

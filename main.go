@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"interview/algo"
+	"encoding/json"
 )
 
 func main() {
@@ -21,6 +20,21 @@ func main() {
 	//
 	//fmt.Print(algo.ReverseList(nodes))
 
-	fmt.Println(algo.FirstUniqChar("cc"))
+	//fmt.Println(algo.FirstUniqChar("cc"))
 
+	//fmt.Println(resultToMap("apsidaosnbdapisndapnspodamnpo"))
+	//algo.Merge([]int64{2, 3, 1}) //
+
+	//fmt.Println(algo.HasCycle(nodes))
+
+}
+
+func resultToMap(result string) (map[string]int, error) {
+	tmp := make(map[string]int)
+	err := json.Unmarshal([]byte(result), &tmp)
+	if err != nil {
+		return nil, err
+	}
+
+	return tmp, err
 }

@@ -106,3 +106,81 @@ func MergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	//}
 	return nil
 }
+
+func HasCycle(head *ListNode) bool {
+	if head == nil {
+		return false
+	}
+
+	one := head
+	two := head
+
+	for {
+		if two.Next == nil || two.Next.Next == nil {
+			return false
+		}
+
+		if one.Next == nil {
+			return false
+		}
+
+		one = one.Next
+		two = two.Next.Next
+
+		if one.Next == two.Next {
+			return true
+		}
+
+	}
+}
+
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+	l3 := &ListNode{}
+	current := l3
+	carry := 0
+
+	for {
+		l1V := 0
+		l2V := 0
+
+		if l1 != nil {
+			l1V = l1.Val
+		}
+
+		if l2 != nil {
+			l2V = l2.Val
+		}
+
+		tmp := l1V + l2V + carry
+
+		if tmp < 10 {
+			carry = 0
+		} else {
+			tmp = tmp % 10
+			carry = 1
+		}
+
+		current.Val = tmp
+		if l1 == nil || l1.Next == nil {
+			l1 = nil
+		} else {
+			l1 = l1.Next
+		}
+
+		if l2 == nil || l2.Next == nil {
+			l2 = nil
+		} else {
+			l2 = l2.Next
+		}
+
+		if l1 == nil && l2 == nil {
+			if carry >= 1 {
+				current.Next = &ListNode{Val: carry}
+			}
+			return l3
+		}
+
+		current.Next = &ListNode{}
+		current = current.Next
+	}
+}

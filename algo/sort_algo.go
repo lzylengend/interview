@@ -4,33 +4,151 @@ import (
 	"fmt"
 )
 
-func Selection(data []int64) {
+func Selection(data []int64) []int64 {
+	for i := 0; i < len(data); i++ {
+		tmpIndex := i
 
+		for j := i + 1; j < len(data); j++ {
+			if data[tmpIndex] > data[j] {
+				tmpIndex = j
+			}
+		}
+
+		data[i], data[tmpIndex] = data[tmpIndex], data[i]
+	}
+
+	return data
 }
 
-func ClimbStairs(n int) int {
-	a := 1
-	b := 2
-	tmp := a + b
+func Insert(data []int64) []int64 {
+	for i := 1; i < len(data); i++ {
+		tmp := data[i]
+		j := i - 1
+		for ; j >= 0; j-- {
+			if data[j] > tmp {
+				data[j+1] = data[j]
+			} else {
+				break
+			}
+		}
 
-	if n < 1 {
-		return 0
+		data[j+1] = tmp
+		fmt.Println(data)
+	}
+	return data
+}
+
+func Bubble(data []int64) {
+	for i := 0; i < len(data); i++ {
+		for j := 0; j < len(data)-1; j++ {
+			if data[j] > data[j+1] {
+				data[j], data[j+1] = data[j+1], data[j]
+			}
+		}
+	}
+	fmt.Println(data)
+}
+
+func Merge(data []int64) []int64 {
+	mid := len(data) / 2
+	fmt.Println(data)
+	if mid > 0 {
+		fmt.Println(mid)
+		data1 := Merge(data[:mid])
+		data2 := Merge(data[mid:])
+		fmt.Println(mid, data1, data2)
+		merge(data1, data2)
 	}
 
-	if n == 1 {
-		return a
+	return data
+}
+
+func merge(data1 []int64, data2 []int64) []int64 {
+	res := []int64{}
+	i := 0
+	j := 0
+
+	for {
+		if i > len(data1) {
+			res = append(res, data2[j:]...)
+			break
+		}
+
+		if j > len(data2) {
+			res = append(res, data1[i:]...)
+			break
+		}
+
+		if data1[i] > data2[j] {
+			res = append(res, data2[j])
+			j++
+		}
+
+		if data1[i] <= data2[j] {
+			res = append(res, data1[i])
+			i++
+		}
+
+	}
+	return res
+}
+
+func QuickSort(data []int64) {
+	fmt.Println(quickSort(data))
+}
+
+func quickSort(data []int64) []int64 {
+	mid := 0
+
+	data, mid = partition(data)
+	fmt.Println(data, mid)
+	if (mid - 1) > 0 {
+		quickSort(data[:mid-1])
 	}
 
-	if n == 2 {
-		return b
+	fmt.Println(data[mid:])
+	if len(data) > (mid - 1) {
+		quickSort(data[mid-1:])
 	}
 
-	for i := 3; i <= n; i++ {
-		tmp = a + b
-		a, b = b, tmp
+	return data
+}
+
+func partition(data []int64) ([]int64, int) {
+	if len(data) <= 1 {
+		return data, 0
 	}
 
-	return tmp
+	i := 0
+	j := 0
+	tmp := data[len(data)-1]
+
+	for {
+		for ; i < len(data); i++ {
+			if data[i] > tmp {
+				break
+			}
+		}
+
+		for ; j < len(data); j++ {
+			if data[j] <= tmp && j > i {
+				break
+			}
+		}
+
+		if i > len(data)-1 {
+			break
+		}
+
+		if j > len(data)-1 {
+			break
+		}
+
+		data[i], data[j] = data[j], data[i]
+
+	}
+
+	return data, i
 }
 
 func MaxProfit(prices []int) int {
@@ -229,4 +347,39 @@ func TwoSum(nums []int, target int) []int {
 	}
 
 	return res
+}
+
+func SortList(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	qsort(head, nil)
+	return head
+}
+
+// [head, tail)
+func qsort(head, tail *ListNode) {
+	if head == tail {
+		return
+	}
+	pivot := partition2(head, tail)
+	qsort(head, pivot)
+	qsort(pivot.Next, tail)
+}
+
+// [head, tail)
+func partition2(head, tail *ListNode) *ListNode {
+	pivot := head.Val
+	p := head
+	q := head.Next
+	//for q != tail {
+	for q != nil {
+		if q.Val < pivot {
+			p = p.Next
+			p.Val, q.Val = q.Val, p.Val
+		}
+		q = q.Next
+	}
+	head.Val, p.Val = p.Val, head.Val
+	return p
 }
